@@ -1,0 +1,67 @@
+{#
+ # Homepage template
+ # ---------------
+ #
+ # When this template gets loaded, it will be because someone has accessed
+ # http://yoursite.com/ (without any URI). Craft checks to see if you have
+ # a Single section set to be the Homepage (as you do, by default), and
+ # loads the section’s Template (this file). A special ‘entry’ variable
+ # will already be set for you, assigned to the Homepage entry.
+ #
+ # It's worth noting that even if you didn't have a Homepage Single section,
+ # as long as this template remains at craft/templates/index.html, it
+ # would still be the one to get loaded when accessing http://yoursite.com/,
+ # albeit without an ‘entry’ variable already set for you.
+ #
+ # See this page for more details on how Craft routes requests:
+ # http://craftcms.com/docs/routing
+ #}
+
+{% extends "_layout" %}
+
+{% block main %}
+
+<div class="full-bleed-header" style="background-size: 100%; height: 300px; background-image:url(/images/wood-table.jpg)">
+    <div class="page-title text-center">
+        <h2 class="logo"><span class="scripty">Crafty</span> Brewery</h2>
+        <p class="tagline reverse">{{ entry.tagline }}</p>
+
+        <p>
+        
+            {% for button in entry.buttonCollection %}
+
+            <a class="button radius" href="{{ button.buttonUrl }}">{{ button.buttonLabel }}</a>
+
+            {% endfor %} 
+    
+        </p>
+
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="large-6 small-12 columns">
+       <h3>Latest Brews</h3>
+        <div class="large-12 small-12 columns">
+			{% for brew in craft.entries.section('brews').limit(10) %}
+
+            <a href="{{ brew.url }}">
+            <div class="row hp-brew-item" style="background-image:url({{ brew.brewImage.first().getUrl('homepageThumb')}});">
+                <p class="reverse">{{ brew.title }}</p>
+            </div>
+			</a>
+			<br>
+			{% endfor %}
+        </div>
+    </div>
+    <div class="large-6 small-12 columns">
+        <h3>Latest News</h3>
+        <ul class="news-listing">
+            {% for item in craft.entries.section('news').limit(10) %}
+            <li><a href="{{ item.url }}">{{ item.introduction | striptags }} &raquo;</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
